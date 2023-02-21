@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="twinkle.css">
+    <style>
+        .navbar{
+            width: 100%;
+            height: 100px;
+            position: fixed;
+            z-index: 1;
+        }
+
+        .navbar-custom {
+            background: black;
+        }
+        .nav-item, .dropdown-item{
+            font-size: 21px;
+            color: black;
+        }
+        
+        body{
+            background: black;
+        }
+
+        input[type="search"]{
+            background: transparent;
+            border: 1px solid grey;
+            color: white;
+        }
+        input[type="search"]:focus   
+        {
+            background: transparent;
+            border: 0;
+            color: white;
+        }
+        .btn{
+            border: 0;
+            color: white;
+            border-radius: 20%;
+        }
+        .btn:hover{
+            background-color: transparent;
+            border-color: grey;
+            color: grey;
+        }
+        .dropdown-menu{
+            background: inherit;          
+        }
+        .dropdown-item{
+            color: white;
+        }
+        .dropdown-item:hover{
+            background: rgb(85, 85, 85);
+            color: white;
+        }
+
+        #container{
+            position: absolute;
+            margin: auto;
+            width: 100vw;
+            height: 80pt;
+            top: 0;
+            bottom: 0;
+            filter: url(#threshold) blur(0.6px);
+        }
+        #text1,
+        #text2 {
+            position: absolute;
+            width: 100%;
+            display: inline-block;
+            font-family: "Helvetica Neue", Helvetica;
+            font-size: 100pt;
+            color: white;
+
+            text-align: center;
+
+            user-select: none;
+        }
+
+        .footer{
+            position: absolute;
+            top: 1000px;
+            width: 100%;
+            text-align: center;
+            padding: 30px 0;
+            background: black;
+            color: white;
+        }
+
+        .icons .bx{
+            margin: 0 13px;
+            cursor: pointer;
+            padding: 18px 0;
+        }
+
+        .bxl-facebook-circle,
+        .bxl-twitter,
+        .bxl-linkedin-square,
+        .bxl-discord-alt{
+            color: rgb(255, 255, 255);
+        }
+
+        .bxl-instagram{
+            color: rgb(255, 255, 255);
+        }
+
+    </style>
+    <title>BookStore</title>
+</head>
+<body>
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <a class="navbar-brand" href="#">
+            <img src="logo3.png" width="150" height="40" class="d-inline-block align-top" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" style="cursor:pointer;" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Books Info</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="@{/bookform}">Add Book</a>
+                        <a class="dropdown-item" href="@{/books}">View Book</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" style="cursor:pointer;" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Author Info</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="@{/authorsform}">Add Author</a>
+                        <a class="dropdown-item" href="@{/authortable}">View Author</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" style="cursor:pointer;" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category Info</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="@{/categoryform}">Add Category</a>
+                        <a class="dropdown-item" href="@{/categorytable}">View Category</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@{/books}">Books Available</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+    <div id="container">
+            <span id="text1"></span>
+            <span id="text2"></span>
+    
+        <svg id="filters">
+            <defs>
+                <filter id="threshold">
+                    <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0
+                                            0 1 0 0 0
+                                            0 0 1 0 0
+                                            0 0 0 255 -140" />
+                </filter>
+            </defs>
+        </svg> 
+    </div>
+
+    <h2 class="c1">Python</h2>
+    <h2 class="c2">C++</h2>
+    <h2 class="c3">Java</h2>
+    <h2 class="c4">3js</h2>
+    <h2 class="c5">C#</h2>
+    <h2 class="c6">Javascript</h2>
+    <h2 class="c7">Ruby</h2>
+    <h2 class="c8">Css</h2>
+    <h2 class="c9">PHP</h2>
+    <h2 class="c10">Swift</h2>
+    <h2 class="c11">React</h2>
+    <h2 class="c12">Angular</h2>
+    <h2 class="c13">Scala</h2>
+
+    <section class="footer">
+        <div class="icons">
+            <i class='bx bxl-facebook-circle' ></i>
+            <i class='bx bxl-twitter' ></i>
+            <i class='bx bxl-instagram' ></i>
+            <i class='bx bxl-linkedin-square' ></i>
+        </div>
+        <p>Join my Discord Server <i class='bx bxl-discord-alt' ></i></p>
+    </section>
+
+    <!-- Scripts -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="js/three.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        window.addEventListener('resize', function()
+        {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        var verticesOfCube = [
+        -1,-1,-1,    1,-1,-1,    1, 1,-1,    -1, 1,-1,
+        -1,-1, 1,    1,-1, 1,    1, 1, 1,    -1, 1, 1,
+        ];
+
+        var indicesOfFaces = [
+        2,1,0,    0,3,2,
+        0,4,7,    7,3,0,
+        0,1,5,    5,4,0,
+        1,2,6,    6,5,1,
+        2,3,7,    7,6,2,
+        4,5,6,    6,7,4
+        ];
+
+        //create the shape
+        var geometry = new THREE.PolyhedronGeometry(verticesOfCube, indicesOfFaces, 10, 1);
+
+        //create a material, color, image texture
+        var material = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true}); 
+        var cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        camera.position.z=30;
+        cube.position.y = -1;
+
+        //game logic
+        var update = function()
+        {
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.005;
+        };
+
+        //draw scene
+        var render = function()
+        {
+            renderer.render(scene, camera);
+        };
+
+        //run game loop(update, render, repeat)
+        var GameLoop = function()
+        {
+            requestAnimationFrame(GameLoop);
+
+            update();
+            render();
+        };
+
+        GameLoop();
+    </script>
+    <script>
+            const elts = {
+        text1: document.getElementById("text1"),
+        text2: document.getElementById("text2")
+    };
+
+    const texts = [
+        "Welcome to Flora!!!",
+        "Python",
+        "PHP",
+        "C++",
+        "Java",
+        "Javascript",
+        "C#",
+        "Html/Css",
+        "ThreeJs",
+        "We have them all!"
+    ];
+
+    const morphTime = 1;
+    const cooldownTime = 0.25;
+
+    let textIndex = texts.length - 1;
+    let time = new Date();
+    let morph = 0;
+    let cooldown = cooldownTime;
+
+    elts.text1.textContent = texts[textIndex % texts.length];
+    elts.text2.textContent = texts[(textIndex + 1) % texts.length];
+
+    function doMorph() {
+        morph -= cooldown;
+        cooldown = 0;
+
+        let fraction = morph / morphTime;
+
+        if (fraction > 1) {
+            cooldown = cooldownTime;
+            fraction = 1;
+        }
+
+        setMorph(fraction);
+    }
+
+    function setMorph(fraction) {
+        elts.text2.style.filter = `blur(${Math.min(8 / fraction - 8, 100)}px)`;
+        elts.text2.style.opacity = `${Math.pow(fraction, 0.4) * 100}%`;
+
+        fraction = 1 - fraction;
+        elts.text1.style.filter = `blur(${Math.min(8 / fraction - 8, 100)}px)`;
+        elts.text1.style.opacity = `${Math.pow(fraction, 0.4) * 100}%`;
+
+        elts.text1.textContent = texts[textIndex % texts.length];
+        elts.text2.textContent = texts[(textIndex + 1) % texts.length];
+    }
+
+    function doCooldown() {
+        morph = 0;
+
+        elts.text2.style.filter = "";
+        elts.text2.style.opacity = "100%";
+
+        elts.text1.style.filter = "";
+        elts.text1.style.opacity = "0%";
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        let newTime = new Date();
+        let shouldIncrementIndex = cooldown > 0;
+        let dt = (newTime - time) / 1000;
+        time = newTime;
+
+        cooldown -= dt;
+
+        if (cooldown <= 0) {
+            if (shouldIncrementIndex) {
+                textIndex++;
+            }
+
+            doMorph();
+        } else {
+            doCooldown();
+        }
+    }
+
+    animate();
+
+    </script>
+</body>
+</html>
